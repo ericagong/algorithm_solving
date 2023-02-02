@@ -1,3 +1,5 @@
+# 음료수 얼려먹기 (ICT p.149)
+
 N, M = list(map(int, input().split()))
 graph_li = []
 for _ in range(N):
