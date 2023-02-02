@@ -8,6 +8,7 @@ def dfs(x, y):
     return False
   if graph_li[x][y] == 0:
     graph_li[x][y] = 2 # 방문 처리
+    print(1)
     # 북 남 서 동
     dfs(x-1, y)
     dfs(x+1, y)
