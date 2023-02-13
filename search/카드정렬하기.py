@@ -3,6 +3,7 @@
 import sys
 from heapq import heapify, heappush, heappop
 
+
 input = sys.stdin.readline
 n = int(input())
 cards = [int(input()) for _ in range(n)]
