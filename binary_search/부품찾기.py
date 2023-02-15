@@ -9,17 +9,17 @@ m = int(input())
 checks = list(map(int, input().split()))
 
 # 이진 탐색을 위해서는 반드시 정렬 필요
-checks.sort()
+nums.sort()
 
 def binary_search(li, t, s, e):
   while s <= e:
-    m = (s + e) // 2
-    if li[m] == t:
+    mid = (s + e) // 2
+    if li[mid] == t:
       return 'yes'
-    elif li[m] < t:
-      s = m + 1
+    elif li[mid] < t:
+      s = mid + 1
     else:
-      e = m - 1
+      e = mid - 1
   return 'no'
 
 for c in checks:
