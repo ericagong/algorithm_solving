@@ -9,7 +9,6 @@ t = int(input())
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
-
 def solution():
     n = int(input())
     g = [[list() for _ in range(n)] for _ in range(n)]
@@ -27,7 +26,6 @@ def solution():
     dijkstra(0, 0, d, c, g)
 
     print(d[n - 1][n - 1])
-
 
 def dijkstra(sx, sy, d, c, g):
     hq = []
