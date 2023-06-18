@@ -132,25 +132,18 @@ turns.forEach((t) => {
     // 숫자 못 지운 경우,
     if (deleted_cnt === 0) {
       const avg = get_avg();
-      let bigger = [];
-      let smaller = [];
 
       for (let i = 0; i < N; i++) {
         for (let j = 0; j < M; j++) {
           if (g[i][j] !== "*") {
-            if (g[i][j] < avg) smaller.push([i, j]);
-            if (g[i][j] > avg) bigger.push([i, j]);
+            if (g[i][j] < avg) {
+              g[i][j] += 1;
+            } else if (g[i][j] > avg) {
+              g[i][j] -= 1;
+            }
           }
         }
       }
-
-      bigger.forEach(([cx, cy]) => {
-        g[cx][cy] -= 1;
-      });
-
-      smaller.forEach(([cx, cy]) => {
-        g[cx][cy] += 1;
-      });
     }
   }
 });
