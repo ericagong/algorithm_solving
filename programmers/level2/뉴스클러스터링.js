@@ -1,3 +1,5 @@
+// https://school.programmers.co.kr/learn/courses/30/lessons/17677
+
 function compact(s, size) {
   let result = "";
   let prev = s.slice(0, size);
