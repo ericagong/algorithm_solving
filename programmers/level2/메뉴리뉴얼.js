@@ -3,8 +3,10 @@
 let select = "";
 const comb = new Map();
 
+// 가능한 모든 조합 구하기
 function DFS(order, r, cnt, startIdx) {
   if (cnt === r) {
+    // 조합의 카운트 수를 추가
     comb.set(select, comb.get(select) + 1 || 1);
     return;
   }
@@ -20,13 +22,14 @@ function solution(orders, course) {
 
   course.forEach((r) => {
     orders.forEach((order) => {
-      order = Array.from(order).sort().join("");
+      order = Array.from(order).sort().join(""); // AB BA는 같으므로 정렬한 뒤 조합 구하도록 처리
       DFS(order, r, 0, 0);
     });
 
     let max_order = -Infinity;
     let temp = [];
 
+    // 가장 많은 손님들이 시킨 조합을 추출
     for (let [key, value] of comb.entries()) {
       if (value < 2) continue;
       if (max_order === value) temp.push(key);
@@ -35,9 +38,11 @@ function solution(orders, course) {
         temp = [key];
       }
     }
+
     candidates.push(...temp);
     comb.clear();
   });
 
+  // 유니코드 사전 순으로 정렬해 반환
   return candidates.sort();
 }
