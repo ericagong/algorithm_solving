@@ -1,37 +1,19 @@
 // https://school.programmers.co.kr/learn/courses/30/lessons/17683?language=javascript#
 
-function getPlayTime(start, end) {
-  const [sHH, sMM] = start.split(":").map(Number);
-  const [eHH, eMM] = end.split(":").map(Number);
-  return eHH * 60 + eMM - (sHH * 60 + sMM) + 1; // 종료 시간까지 포함
-}
-
-// 치환 함수 - 빼먹지 않도록 주의
-function getNotes(info) {
-  return info
-    .replaceAll("A#", "a")
-    .replaceAll("C#", "c")
-    .replaceAll("D#", "d")
-    .replaceAll("F#", "f")
-    .replaceAll("G#", "g");
-}
-
 function solution(m, musicinfos) {
-  m = getNotes(m);
+  m = m.replace(/[A-Z]#/g, (v) => v[0].toLowerCase());
 
   const candidates = [];
   musicinfos.forEach((info) => {
     const [start, end, name, note] = info.split(",");
-    const playTime = getPlayTime(start, end);
-    let playNotes = getNotes(note);
+    const playTime =
+      (new Date(`1970-01-01 ${end}:00`) - new Date(`1970-01-01 ${start}:00`)) /
+      60000;
+    let playNotes = note.replace(/[A-Z]#/g, (v) => v[0].toLowerCase()); // 함수 형태로 작성 가능
 
-    if (playNotes.length >= playTime) {
-      playNotes = playNotes.slice(0, playTime);
-    } else {
-      const q = parseInt(playTime / playNotes.length);
-      const r = playTime % playNotes.length;
-      playNotes = playNotes.repeat(q) + playNotes.slice(0, r);
-    }
+    playNotes = playNotes
+      .repeat(Math.ceil(playTime / playNotes.length))
+      .slice(0, playTime);
 
     if (playNotes.includes(m)) candidates.push([name, playTime]);
   });
