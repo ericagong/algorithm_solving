@@ -15,19 +15,23 @@ function log(graph) {
 const dx = [-1, 1, 0, 0];
 const dy = [0, 0, -1, 1];
 function dfs(x, y, g, N, M) {
+  // 범위 벗어나면 정상 종료 X
   if (x < 0 || y < 0 || x >= N || y >= M) return false;
 
   if (g[x][y] === 0) return false;
   if (g[x][y] === 2) return false;
 
+  // 방문처리
   g[x][y] = 2;
 
+  // 상하좌우에 대해 재귀호출
   for (let i = 0; i < 4; i++) {
     const nx = x + dx[i];
     const ny = y + dy[i];
     dfs(nx, ny, g, N, M);
   }
 
+  // 정상 종료
   return true;
 }
 
