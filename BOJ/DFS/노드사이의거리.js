@@ -13,7 +13,9 @@ for (let i = 0; i < N - 1; i++) {
 
 let v = new Array(N + 1).fill(false);
 let cd = 0;
-function dfs(cn, en) {
+function dfs(cn, cd, en) {
+  // 기방문 노드 도달시 종료
+  if (v[cn]) return;
   v[cn] = true;
 
   // 특정 노드 도달 시 dfs 종료
@@ -23,12 +25,7 @@ function dfs(cn, en) {
   }
 
   for (const [n, d] of g[cn]) {
-    if (v[n]) continue;
-    cd += d;
-    v[n] = true;
-    dfs(n, en);
-    cd -= d;
-    v[n] = false;
+    dfs(n, cd + d, en);
   }
 }
 
@@ -39,5 +36,5 @@ for (let i = 0; i < M; i++) {
   cd = 0;
   v = new Array(N + 1).fill(false);
 
-  dfs(n1, n2);
+  dfs(n1, 0, n2);
 }
