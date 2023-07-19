@@ -1,3 +1,5 @@
+// https://www.acmicpc.net/problem/14889
+
 const fs = require("fs");
 const inputs = fs.readFileSync("/dev/stdin").toString().split("\n");
 
@@ -7,66 +9,67 @@ for (let i = 0; i < N; i++) {
   g[i] = inputs.shift().split(" ").map(Number);
 }
 
-function log(graph) {
-  console.log();
-  for (let i = 0; i < graph.length; i++) {
-    console.log(graph[i].join(" "));
-  }
-}
-
-let total_sum = 0;
-for (let i = 0; i < N; i++) {
-  for (let j = 0; j < N; j++) {
-    total_sum += g[i][j];
-  }
-}
-
+const all = Array(N)
+  .fill(0)
+  .map((_, idx) => idx);
 const teamA = [];
-const r = parseInt(N / 2);
+let pairs = [];
 let min_diff = Infinity;
-let perms = [];
-const p = [];
-const visited = new Array(r).fill(false);
 
-// teamC2 순열 추출
-function get_perm(cnt, team) {
-  if (cnt === 2) {
-    perms.push([...p]); // perms.push(p)
-    return;
-  }
+function get_team(cnt, startIdx) {
+  if (cnt === parseInt(N / 2)) {
+    get_pair(teamA, 0, 0);
+    const pairsA = [...pairs];
+    pairs = [];
 
-  for (let i = 0; i < team.length; i++) {
-    if (visited[i]) continue;
-    p.push(team[i]);
-    visited[i] = true;
-    get_perm(cnt + 1, team);
-    p.pop();
-    visited[i] = false;
-  }
-}
-
-// teamA 조합 추출
-function get_comb(cnt, startIdx) {
-  if (cnt === r) {
-    perms = [];
-    get_perm(0, teamA);
-    let teamA_sum = 0;
-    perms.forEach(([mem1, mem2]) => {
-      teamA_sum += g[mem1][mem2];
+    const setA = new Set(teamA);
+    const teamB = [];
+    all.forEach((member) => {
+      if (!setA.has(member)) teamB.push(member);
     });
-    const teamB_sum = total_sum - teamA_sum;
-    console.log(teamA_sum, teamB_sum);
-    const temp_diff = Math.abs(teamA_sum - teamB_sum);
-    min_diff = Math.min(min_diff, temp_diff);
+
+    get_pair(teamB, 0, 0);
+    const pairsB = [...pairs];
+    pairs = [];
+
+    const scoreA = get_score(pairsA);
+    const scoreB = get_score(pairsB);
+    const diff = Math.abs(scoreA - scoreB);
+
+    min_diff = Math.min(min_diff, diff);
+
     return;
   }
 
   for (let i = startIdx; i < N; i++) {
     teamA.push(i);
-    get_comb(cnt + 1, i + 1);
+    get_team(cnt + 1, i + 1);
     teamA.pop();
   }
 }
 
-get_comb(0, 0);
+let pair = [];
+function get_pair(team, cnt, startIdx) {
+  if (cnt === 2) {
+    pairs.push([...pair]); // 중요
+    return;
+  }
+
+  for (let i = startIdx; i < team.length; i++) {
+    pair.push(team[i]);
+    get_pair(team, cnt + 1, i + 1);
+    pair.pop();
+  }
+}
+
+function get_score(pairs) {
+  let score = 0;
+  pairs.forEach(([i, j]) => {
+    score += g[i][j] + g[j][i];
+  });
+  return score;
+}
+
+get_team(0, 0);
+
 console.log(min_diff);
