@@ -20,3 +20,19 @@ function solution(n, t, m, p) {
 
   return result;
 }
+
+function solution2(n, t, m, p) {
+  let num = 0;
+  let str = "";
+  while (str.length < m * t) {
+    str += num.toString(n);
+    num += 1;
+  }
+
+  let answer = "";
+  for (let x = 0; x < t; x++) {
+    answer += str[m * x + p - 1].toUpperCase();
+  }
+
+  return answer;
+}
