@@ -1,3 +1,5 @@
+// 시간초과
+
 const fs = require("fs");
 const inputs = fs.readFileSync("/dev/stdin").toString().split("\n");
 
