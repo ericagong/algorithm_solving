@@ -8,58 +8,54 @@ const g = [];
 for (let i = 0; i < N; i++) {
   g[i] = inputs.shift().split(" ").map(Number);
 }
-const moves = inputs.shift().split(" ").map(Number);
+const moves = inputs
+  .shift()
+  .split(" ")
+  .map((i) => Number(i) - 1);
 
-function getNewDice(d, dice) {
-  // 위 아래 앞 뒤 좌 우
-  const [x0, x1, x2, x3, x4, x5] = dice;
-  // 동 서 북 남 1 2 3 4
-  switch (d) {
+function getNewDice(dice, i) {
+  const [x1, x2, x3, x4, x5, x6] = dice;
+  switch (i) {
+    case 0:
+      return [x3, x2, x4, x6, x5, x1];
     case 1:
-      return [x4, x5, x2, x3, x1, x0];
+      return [x6, x2, x1, x3, x5, x4];
     case 2:
-      return [x5, x4, x2, x3, x0, x1];
+      return [x5, x1, x3, x2, x4, x6];
     case 3:
-      return [x2, x3, x1, x0, x4, x5];
-    case 4:
-      return [x3, x2, x0, x1, x4, x5];
+      return [x2, x4, x3, x5, x1, x6];
   }
 }
 
-function changeBottom(to, dice) {
-  const [top, bottom, ...rest] = dice;
-  return [top, to, ...rest];
-}
-
-// 동 서 북 남 0123
+let dice = [0, 0, 0, 0, 0, 0];
+// 동 서 북 남
+// 0 1 2 3
 const dx = [0, 0, -1, 1];
 const dy = [1, -1, 0, 0];
-let dice = [0, 0, 0, 0, 0, 0];
 let cx = x;
 let cy = y;
+
+let result = "";
 for (let i = 0; i < moves.length; i++) {
-  const d = moves[i];
+  const dir = moves[i];
+  const nx = cx + dx[dir];
+  const ny = cy + dy[dir];
 
-  // 동서남북 1234
-  const nx = cx + dx[d - 1];
-  const ny = cy + dy[d - 1];
+  if (nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
 
-  if (nx < 0 || nx > N - 1 || ny < 0 || ny > M - 1) continue;
-
-  // 주사위 현재 위치 변경
+  dice = getNewDice(dice, dir);
   cx = nx;
   cy = ny;
 
-  // 주사위 굴림
-  dice = getNewDice(d, dice);
-
-  // 주사위 맨 아래 값이나 지도 값 변경
-  if (g[nx][ny] === 0) g[nx][ny] = dice[1];
+  const bottom = dice[3];
+  const target = g[nx][ny];
+  if (target === 0) g[nx][ny] = bottom;
   else {
-    dice = changeBottom(g[nx][ny], dice);
+    dice[3] = target;
     g[nx][ny] = 0;
   }
 
-  // 주사위 맨 위 출력
-  console.log(dice[0]);
+  result += `${dice[0]}\n`;
 }
+
+console.log(result);
