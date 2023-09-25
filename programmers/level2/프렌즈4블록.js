@@ -63,3 +63,55 @@ function solution(m, n, board) {
 
   return total_cnt;
 }
+
+const X = "X";
+
+function findPangs(b, n, m) {
+  const pangs = new Set();
+  for (let i = 0; i < n - 1; i++) {
+    for (let j = 0; j < m - 1; j++) {
+      const curr = b[i][j];
+      if (curr === X) continue;
+      if (
+        curr === b[i + 1][j] &&
+        curr === b[i][j + 1] &&
+        curr === b[i + 1][j + 1]
+      ) {
+        pangs.add(`${i},${j}`);
+        pangs.add(`${i + 1},${j}`);
+        pangs.add(`${i},${j + 1}`);
+        pangs.add(`${i + 1},${j + 1}`);
+      }
+    }
+  }
+  return Array.from(pangs).map((item) => item.split(","));
+}
+
+function solution2(m, n, board) {
+  let b = Array.from(Array(n), () => Array(m).fill(X));
+  board.forEach((row, i) => {
+    for (let j = 0; j < row.length; j++) {
+      b[j][i] = row[j];
+    }
+  });
+
+  let pangs = findPangs(b, n, m);
+  let result = 0;
+  while (pangs.length !== 0) {
+    pangs.forEach(([x, y]) => {
+      b[x][y] = X;
+      result += 1;
+    });
+
+    const newB = [];
+    b.forEach((row) => {
+      const toRight = row.join("").replaceAll(X, "").padStart(m, X).split("");
+      newB.push(toRight);
+    });
+
+    b = newB;
+    pangs = findPangs(b, n, m);
+  }
+
+  return result;
+}

@@ -1,34 +1,38 @@
 // https://school.programmers.co.kr/learn/courses/30/lessons/17677
 
-function compact(s, size) {
-  let result = "";
-  let prev = s.slice(0, size);
-  let curr = "";
-  let cnt = 1;
-
-  for (let i = size; i < s.length; i += size) {
-    curr = s.slice(i, i + size);
-    if (prev === curr) {
-      cnt += 1;
-    } else {
-      if (cnt === 1) result += prev;
-      else result += String(cnt) + prev;
-      cnt = 1;
-    }
-    prev = curr;
+function getCount(str) {
+  const count = new Map();
+  for (let i = 0; i < str.length - 1; i++) {
+    let word = str.slice(i, i + 2);
+    if (word.match(/[^a-zA-Z]/g)) continue;
+    word = word.toLowerCase();
+    count.set(word, count.get(word) + 1 || 1);
   }
-
-  // 맨 뒤 붙여주기
-  if (cnt === 1) result += prev;
-  else result += String(cnt) + prev;
-
-  return result.length;
+  return count;
 }
 
-function solution(s) {
-  let min_length = s.length;
-  for (let i = 1; i < parseInt(s.length / 2) + 1; i++) {
-    min_length = Math.min(min_length, compact(s, i));
+function solution(str1, str2) {
+  const cnt1 = getCount(str1);
+  const cnt2 = getCount(str2);
+
+  const words = new Set();
+  for (const k of cnt1.keys()) {
+    words.add(k);
   }
-  return min_length;
+  for (const k of cnt2.keys()) {
+    words.add(k);
+  }
+
+  let aAndB = 0;
+  let aOrB = 0;
+  words.forEach((word) => {
+    const a = cnt1.get(word) || 0;
+    const b = cnt2.get(word) || 0;
+    aAndB += Math.min(a, b);
+    aOrB += Math.max(a, b);
+  });
+
+  const MUL = 65536;
+  if (aAndB === 0 && aOrB === 0) return 1 * MUL;
+  else return Math.floor((aAndB / aOrB) * MUL);
 }

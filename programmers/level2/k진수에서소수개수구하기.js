@@ -21,3 +21,26 @@ function solution(n, k) {
   });
   return cnt;
 }
+
+// function isPrime(n) {
+//   if (n === 1) return false;
+
+//   for (let i = 2; i <= Math.sqrt(n); i++) {
+//     if (n % i === 0) return false;
+//   }
+//   return true;
+// }
+
+// function solution(n, k) {
+//   const arr = n
+//     .toString(k)
+//     .split(0)
+//     .filter((item) => item !== "")
+//     .map(Number);
+
+//   const answer = arr.reduce((acc, curr) => {
+//     if (isPrime(curr)) acc += 1;
+//     return acc;
+//   }, 0);
+//   return answer;
+// }
