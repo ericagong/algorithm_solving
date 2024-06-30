@@ -1,5 +1,5 @@
 // https://school.programmers.co.kr/learn/courses/30/lessons/72412
-
+// 1안
 let queries = new Map();
 const options = [
   ["-", "cpp", "java", "python"], // 0
@@ -68,3 +68,5 @@ function solution(info, query) {
 
   return result;
 }
+
+// 2안
