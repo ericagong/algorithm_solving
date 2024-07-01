@@ -20,3 +20,28 @@ function solution(dartResult) {
 
   return darts.reduce((acc, curr) => acc + curr, 0);
 }
+
+// solution2
+function solution2(dartResult) {
+  const rule = /(\d){1,2}(S|D|T)(#|\*)?/g;
+  const rounds = dartResult.match(rule);
+  const scores = new Array(3).fill(0);
+
+  for (let i = 0; i < scores.length; i++) {
+    let s = parseInt(rounds[i]);
+    const [b, o] = rounds[i].split(/\d/).join("");
+
+    if (b === "S") s = Math.pow(s, 1);
+    else if (b === "D") s = Math.pow(s, 2);
+    else if (b === "T") s = Math.pow(s, 3);
+
+    if (o === "*") {
+      s = s * 2;
+      if (i !== 0) scores[i - 1] = scores[i - 1] * 2;
+    } else if (o === "#") s = s * -1;
+
+    scores[i] = s;
+  }
+
+  return scores.reduce((acc, cur) => acc + cur, 0);
+}
