@@ -1,6 +1,6 @@
 // https://school.programmers.co.kr/learn/courses/30/lessons/42889
 
-function solution(N, stages) {
+function solution1(N, stages) {
   let curPlayers = new Array(N).fill(0);
 
   for (let stage of stages) {

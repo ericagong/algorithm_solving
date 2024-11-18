@@ -1,3 +1,4 @@
+
 // https://school.programmers.co.kr/learn/courses/30/lessons/92334
 
 function solution(id_list, report, k) {
@@ -21,4 +22,5 @@ function solution(id_list, report, k) {
   // 유저가 받은 메일 수 반환
   let answer = id_list.map((a) => reporting.get(a) || 0);
   return answer;
+
 }
