@@ -1,21 +1,38 @@
-//https:school.programmers.co.kr/learn/courses/30/lessons/72410?language=javascript
+// https://school.programmers.co.kr/learn/courses/30/lessons/72410
 
-function solution1(new_id) {
-  let id = new_id
-    .toLowerCase()
-    .replaceAll(/[^\da-z\-_.]/g, "")
-    .replaceAll(/[.]{2,}/g, ".");
+function solution(new_id) {
+  let result = new_id;
 
-  if (id.startsWith(".")) id = id.slice(1);
-  if (id.endsWith(".")) id = id.slice(0, id.length - 1);
+  result = result
+    .toLowerCase() // 1단계
+    .replace(/[^\w-_.]/g, "") // 2단계
+    .replace(/\.{2,}/g, "."); // 3단계
 
-  if (id.length === 0) id = "a";
-  if (id.length >= 16) {
-    id = id.slice(0, 15);
-    if (id.endsWith(".")) id = id.slice(0, id.length - 1);
+  // 4단계
+  if (result[0] === ".") {
+    result = result.slice(1);
   }
-  if (id.length <= 2) id = id.padEnd(3, id[id.length - 1]);
+  if (result[result.length - 1] === ".") {
+    result = result.slice(0, result.length - 1);
+  }
 
-  // console.log(id)
-  return id;
+  // 5단계
+  if (result === "") {
+    result = "a";
+  }
+
+  // 6단계
+  if (result.length >= 16) {
+    result = result.slice(0, 15);
+    if (result[result.length - 1] === ".") {
+      result = result.slice(0, 14);
+    }
+  }
+
+  // 7단계
+  if (result.length <= 2) {
+    result = result.padEnd(3, result[result.length - 1]);
+  }
+
+  return result;
 }

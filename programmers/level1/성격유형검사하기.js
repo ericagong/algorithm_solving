@@ -1,30 +1,27 @@
-//https: school.programmers.co.kr/learn/courses/30/lessons/118666
+
+// https://school.programmers.co.kr/learn/courses/30/lessons/118666
 
 function solution(survey, choices) {
-  const scores = new Map([
-    ["R", 0],
-    ["T", 0],
-    ["C", 0],
-    ["F", 0],
-    ["J", 0],
-    ["M", 0],
-    ["A", 0],
-    ["N", 0],
-  ]);
+  let dict = { R: 0, T: 0, C: 0, F: 0, J: 0, M: 0, A: 0, N: 0 };
+  const score = [0, 3, 2, 1, 0, 1, 2, 3];
 
-  choices.forEach((c, i) => {
-    const [s0, s1] = survey[i];
-    if (c < 4) scores.set(s0, scores.get(s0) + (4 - c));
-    if (c > 4) scores.set(s1, scores.get(s1) + (c - 4));
-  });
-
-  // console.log(scores)
+  for (let i = 0; i < survey.length; i++) {
+    if (choices[i] <= 3) {
+      dict[survey[i][0]] += score[choices[i]];
+    } else if (choices[i] >= 5) {
+      dict[survey[i][1]] += score[choices[i]];
+    }
+  }
 
   let result = "";
-  result += scores.get("R") >= scores.get("T") ? "R" : "T";
-  result += scores.get("C") >= scores.get("F") ? "C" : "F";
-  result += scores.get("J") >= scores.get("M") ? "J" : "M";
-  result += scores.get("A") >= scores.get("N") ? "A" : "N";
+  if (dict["R"] >= dict["T"]) result += "R";
+  else result += "T";
+  if (dict["C"] >= dict["F"]) result += "C";
+  else result += "F";
+  if (dict["J"] >= dict["M"]) result += "J";
+  else result += "M";
+  if (dict["A"] >= dict["N"]) result += "A";
+  else result += "N";
 
   return result;
 }
