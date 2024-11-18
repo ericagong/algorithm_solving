@@ -39,3 +39,31 @@ function solution(msg) {
 
   return result;
 }
+
+function solution2(msg) {
+  const dict = new Map();
+  let index = 1;
+  for (alpha of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+    dict.set(alpha, index);
+    index += 1;
+  }
+
+  const answer = [];
+  while (msg) {
+    let w;
+    for (let i = msg.length; i > 0; i--) {
+      w = msg.slice(0, i);
+      if (dict.has(w)) {
+        break;
+      }
+    }
+    answer.push(dict.get(w));
+    msg = msg.slice(w.length);
+    const c = msg[0];
+    if (c !== "") {
+      dict.set(w + c, dict.size + 1);
+    }
+  }
+
+  return answer;
+}

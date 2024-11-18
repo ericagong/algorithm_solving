@@ -37,3 +37,24 @@ function solution(files) {
   // 이름만 반환
   return parsed.map((v) => v[3]);
 }
+
+function solution2(files) {
+  const NUMBER = /\d{1,5}/;
+  const result = [];
+  files.forEach((file) => {
+    const h = file.split(NUMBER)[0].toLowerCase();
+    const n = Number(file.match(NUMBER)[0]);
+    result.push([file, h, n]);
+  });
+
+  result.sort((a, b) => {
+    if (a[1] > b[1]) return 1;
+    else if (a[1] < b[1]) return -1;
+    else {
+      if (a[2] !== b[2]) return a[2] - b[2];
+      else return 0;
+    }
+  });
+
+  return result.map((info) => info[0]);
+}

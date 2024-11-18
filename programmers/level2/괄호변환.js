@@ -58,3 +58,47 @@ function solution(p) {
       .replaceAll(".", ")")
   );
 }
+
+function isBalanced(str) {
+  const cnt1 = str.replaceAll("(", "").length;
+  const cnt2 = str.replaceAll(")", "").length;
+  return cnt1 === cnt2;
+}
+
+function isRight(str) {
+  let cnt = 0;
+  for (let i = 0; i < str.length; i++) {
+    const w = str[i];
+    if (w === "(") cnt += 1;
+    else {
+      if (cnt <= 0) return false;
+      else cnt -= 1;
+    }
+  }
+  return cnt === 0;
+}
+
+function solution2(p) {
+  if (isRight(p)) return p;
+
+  if (p === "") return "";
+
+  // while문 잘 활용
+  let ei = 2;
+  let u = p.slice(0, ei);
+  while (ei < p.length && !isBalanced(u)) {
+    ei += 2;
+    u = p.slice(0, ei);
+  }
+  let v = p.slice(ei);
+
+  if (isRight(u)) return u + solution(v);
+
+  const revU = u
+    .slice(1, u.length - 1)
+    .replaceAll("(", "*")
+    .replaceAll(")", "(")
+    .replaceAll("*", ")");
+
+  return "(" + solution(v) + ")" + revU;
+}

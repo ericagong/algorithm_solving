@@ -46,3 +46,47 @@ function solution(orders, course) {
   // 유니코드 사전 순으로 정렬해 반환
   return candidates.sort();
 }
+
+function dfs(comb, lastIdx, cnt, word, dict) {
+  if (cnt === comb.length) {
+    dict.set(comb, dict.get(comb) + 1 || 1);
+    return;
+  }
+  for (let i = lastIdx; i < word.length; i++) {
+    comb += word[i];
+    dfs(comb, i + 1, cnt, word, dict);
+    comb = comb.slice(0, comb.length - 1);
+  }
+}
+
+function getCourses(dict) {
+  let max = -Infinity;
+  for (let cnt of dict.values()) {
+    max = Math.max(max, cnt);
+  }
+
+  if (max === 1) return [];
+
+  const courses = [];
+  for (let [course, cnt] of dict.entries()) {
+    if (cnt === max) courses.push(course);
+  }
+
+  return courses;
+}
+
+function solution(orders, course, result) {
+  const courses = [];
+  course.forEach((cnt) => {
+    let dict = new Map();
+    orders.forEach((order) => {
+      const word = order.split("").sort();
+      let comb = "";
+      dfs(comb, 0, cnt, word, dict);
+    });
+
+    courses.push(...getCourses(dict));
+  });
+
+  return courses.sort();
+}

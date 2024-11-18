@@ -28,3 +28,28 @@ function solution(record) {
 
   return result;
 }
+
+function solution2(record) {
+  const nicknames = new Map();
+  const history = [];
+  record.forEach((item) => {
+    const [action, uid, nickname] = item.split(" ");
+    if (!nicknames.has(uid)) nicknames.set(uid, nickname);
+    else {
+      if (action === "Enter") nicknames.set(uid, nickname);
+    }
+    if (action === "Change") nicknames.set(uid, nickname);
+    else history.push([uid, action]);
+  });
+
+  const result = [];
+  const inMsg = `님이 들어왔습니다.`;
+  const outMsg = `님이 나갔습니다.`;
+  history.forEach(([uid, action]) => {
+    const postfix = action === "Enter" ? inMsg : outMsg;
+    const nickname = nicknames.get(uid);
+    result.push(nickname + postfix);
+  });
+
+  return result;
+}

@@ -47,3 +47,44 @@ function solution(fees, records) {
   // 차량 번호 기준 오름차순 정렬
   return feeArr.sort((a, b) => Number(a[0]) - Number(b[0])).map((v) => v[1]);
 }
+
+function toMinute(str) {
+  const [HH, MM] = str.split(":").map(Number);
+  return HH * 60 + MM;
+}
+
+function calculateTime(inTime, outTime) {
+  return toMinute(outTime) - toMinute(inTime);
+}
+
+function solution2(fees, records) {
+  const check = new Map();
+  const time = new Map();
+
+  records.forEach((record) => {
+    const [timeStr, carStr, _] = record.split(" ");
+    if (!check.has(carStr)) check.set(carStr, timeStr);
+    else {
+      const t = calculateTime(check.get(carStr), timeStr);
+      time.set(carStr, time.get(carStr) + t || t);
+      check.delete(carStr);
+    }
+  });
+
+  for (const [carStr, inTime] of check.entries()) {
+    const t = calculateTime(inTime, "23:59");
+    time.set(carStr, time.get(carStr) + t || t);
+  }
+
+  const [BT, BF, UT, UF] = fees;
+  const price = [];
+  for (const [carStr, accTime] of time.entries()) {
+    const overTime = accTime <= BT ? 0 : accTime - BT;
+    const fee = BF + Math.ceil(overTime / UT) * UF;
+    price.push([carStr, fee]);
+  }
+
+  return price
+    .sort((a, b) => Number(a[0]) - Number(b[0]))
+    .map((item) => item[1]);
+}
