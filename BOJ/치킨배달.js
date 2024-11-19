@@ -1,12 +1,12 @@
 // https://www.acmicpc.net/problem/15686
 
-const fs = require("fs");
-let inputs = fs.readFileSync("/dev/stdin").toString().split("\n");
+const fs = require('fs');
+let inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
 
-const [N, M] = inputs.shift().split(" ").map(Number);
+const [N, M] = inputs.shift().split(' ').map(Number);
 let g = [];
 for (let i = 0; i < N; i++) {
-  g[i] = inputs.shift().split(" ").map(Number);
+  g[i] = inputs.shift().split(' ').map(Number);
 }
 
 let houses = [];
@@ -29,7 +29,8 @@ let min_d = Infinity;
 function dfs(cnt, idx) {
   if (cnt === M) {
     // do sth
-    console.log(selected);
+    // console.log(selected);
+    // combs 등 따로 저장하지 않고, 바로 계산해서 공간 save!
     let temp = calc(selected);
     min_d = Math.min(min_d, temp);
     return;
@@ -53,7 +54,6 @@ function calc(selected_stores) {
   houses.forEach(([hx, hy], i) => {
     selected_stores.forEach(([sx, sy]) => {
       cd = Math.abs(hx - sx) + Math.abs(hy - sy);
-      // cd = Math.abs(hx - sx) + Math.abs(sx - sy) // 오타 주의하기!
       ds[i] = Math.min(ds[i], cd);
     });
   });
