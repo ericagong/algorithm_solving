@@ -34,6 +34,7 @@ while (checked <= 4) {
     const ny = cy + dy[bd];
     if (nx < 0 || ny < 0 || nx >= N || ny >= M || m[nx][ny] === 1) break;
     else {
+      // 후진 로직
       cd = cd;
       m[nx][ny] = 2;
       cx = nx;
@@ -46,6 +47,7 @@ while (checked <= 4) {
   const nx = cx + dx[nd];
   const ny = cy + dy[nd];
   if (nx >= 0 && ny >= 0 && nx < N && ny < M && m[nx][ny] === 0) {
+    // 전진 로직
     cd = nd;
     m[nx][ny] = 2;
     cx = nx;
