@@ -2,10 +2,7 @@ const fs = require('fs');
 const inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
 
 const [N, M] = inputs[0].split(' ').map(Number);
-const g = Array.from({ length: N }, () => Array(M).fill(0));
-for (let i = 0; i < N; i++) {
-  g[i] = inputs[i + 1].split('').map(Number);
-}
+const g = inputs.slice(1).map((row) => row.split('').map(Number));
 
 // console.log(N, M, g)
 
