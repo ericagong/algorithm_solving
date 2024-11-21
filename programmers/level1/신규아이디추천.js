@@ -1,38 +1,41 @@
 // https://school.programmers.co.kr/learn/courses/30/lessons/72410
 
-function solution(new_id) {
-  let result = new_id;
+function solution1(new_id) {
+  new_id = new_id
+    .toLowerCase()
+    .replace(/[^\w-_.]/g, '')
+    .replace(/\.{2,}/g, '.')
+    .replace(/^\.|\.$/g, '');
 
-  result = result
-    .toLowerCase() // 1단계
-    .replace(/[^\w-_.]/g, "") // 2단계
-    .replace(/\.{2,}/g, "."); // 3단계
+  if (new_id.length === 0) new_id = 'a';
+  if (new_id.length >= 16) new_id = new_id.slice(0, 15).replace(/\.$/, '');
+  if (new_id.length <= 2) new_id = new_id.padEnd(3, new_id[new_id.length - 1]);
 
-  // 4단계
-  if (result[0] === ".") {
-    result = result.slice(1);
-  }
-  if (result[result.length - 1] === ".") {
-    result = result.slice(0, result.length - 1);
-  }
+  return new_id;
+}
 
-  // 5단계
-  if (result === "") {
-    result = "a";
-  }
+function solution2(new_id) {
+  return new_id
+    .toLowerCase()
+    .replace(/[^\w-_.]/g, '')
+    .replace(/\.{2,}/g, '.')
+    .replace(/^\.|\.$/g, '')
+    .padEnd(1, 'a')
+    .slice(0, 15)
+    .replace(/\.$/, '')
+    .padEnd(3, new_id[new_id.length - 1]);
+}
 
-  // 6단계
-  if (result.length >= 16) {
-    result = result.slice(0, 15);
-    if (result[result.length - 1] === ".") {
-      result = result.slice(0, 14);
-    }
-  }
+function solution3(new_id) {
+  new_id = new_id
+    .toLowerCase()
+    .replace(/[^\w-_.]/g, '')
+    .replace(/\.{2,}/g, '.')
+    .replace(/^\.|\.$/g, '')
+    .replace(/^$/, 'a')
+    .match(/^.{0,14}[^.]/)[0]
+    .replace(/^(.)$/, '$1$1$1') // padEnd 케이스별 대체
+    .replace(/^(.)(.)$/, '$1$2$2');
 
-  // 7단계
-  if (result.length <= 2) {
-    result = result.padEnd(3, result[result.length - 1]);
-  }
-
-  return result;
+  return new_id;
 }
