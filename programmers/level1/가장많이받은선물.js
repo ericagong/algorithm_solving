@@ -16,13 +16,13 @@ function solution(friends, gifts) {
     totalGives.set(from, totalGives.get(from) + 1);
     totalGets.set(to, totalGets.get(to) + 1);
   });
-  console.log(gives);
+  // console.log(gives);
 
   const indexes = new Map([]);
   friends.forEach((name) => {
     indexes.set(name, totalGives.get(name) - totalGets.get(name));
   });
-  console.log(indexes);
+  // console.log(indexes);
 
   const expect = new Map([]);
   for (let i = 0; i < friends.length; i++) {
