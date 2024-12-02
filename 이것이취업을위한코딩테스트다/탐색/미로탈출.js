@@ -13,10 +13,7 @@ function solutinon_bfs(cnt) {
   const q = [[0, 0, 1]];
   while (q.length) {
     const [x, y, cnt] = q.shift();
-    if (x === N - 1 && y === M - 1) {
-      minBFS = Math.min(minB, cnt);
-      return;
-    }
+    if (x === N - 1 && y === M - 1) return cnt; // 처음 도달한 경우가 최단 경로
     for (let i = 0; i < 4; i++) {
       const nx = x + dx[i];
       const ny = y + dy[i];
