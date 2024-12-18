@@ -7,6 +7,7 @@ const [max1, max2] = inputs[1]
   .map(Number)
   .sort((a, b) => b - a);
 
+// not parseInt
 const q = Math.floor(M / (K + 1));
 const r = M % (K + 1);
 const result = (max1 * K + max2) * q + max1 * r;
