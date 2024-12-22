@@ -16,8 +16,7 @@ for (let i = 1; i <= M; i++) {
     if (i - c > 0 && dp[i - c] !== -1) min = Math.min(min, dp[i - c] + 1);
   });
 
-  if (min === Infinity) dp[i] = -1;
-  else dp[i] = min;
+  dp[i] = min === Infinity ? -1 : min;
 }
 
 // console.log(dp)
