@@ -2,10 +2,31 @@ const fs = require('fs');
 const inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
 
 const [N, M] = inputs[0].split(' ').map(Number);
-const g = inputs.slice(1).map((row) => row.split('').map(Number));
+const g = inputs.slice(1).map((input) => input.split('').map(Number));
+// console.log(g, N, M)
 
-// console.log(N, M, g)
+function dfs(g, cx, cy) {
+  if (cx < 0 || cx >= N || cy < 0 || cy >= M) return 0;
+  if (g[cx][cy] > 0) return 0;
+  g[cx][cy] = 2;
+  dfs(g, cx - 1, cy);
+  dfs(g, cx + 1, cy);
+  dfs(g, cx, cy - 1);
+  dfs(g, cx, cy + 1);
+  return 1;
+}
 
+let cnt = 0;
+for (let i = 0; i < N; i++) {
+  for (let j = 0; j < M; j++) {
+    cnt += dfs(g, i, j);
+  }
+}
+
+// console.log(g)
+console.log(cnt);
+
+// 다른 풀이
 // dfs 풀이
 function dfs(s) {
   const [sx, sy] = s;
@@ -46,10 +67,10 @@ function bfs(s) {
   }
 }
 
-let cnt = 0;
+let count = 0;
 for (let i = 0; i < N; i++) {
   for (let j = 0; j < M; j++) {
-    // if (dfs([i, j])) cnt += 1;
+    // if (dfs([i, j])) count += 1;
     bfs([i, j]);
   }
 }
@@ -58,8 +79,8 @@ for (let i = 0; i < N; i++) {
 
 for (let i = 0; i < N; i++) {
   for (let j = 0; j < M; j++) {
-    if (g[i][j] === 2) cnt += 1;
+    if (g[i][j] === 2) count += 1;
   }
 }
 
-console.log(cnt);
+console.log(count);

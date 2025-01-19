@@ -5,19 +5,18 @@ const [N, M] = inputs[0].split(' ').map(Number);
 const cakes = inputs[1].split(' ').map(Number);
 // console.log(N, M, cakes)
 
-let s = 0;
-let e = Math.pow(10, 9);
-let max = -Infinity;
-while (s <= e) {
-  const h = Math.floor((s + e) / 2);
-  const cutSum = cakes.reduce((acc, curr) => {
-    if (curr > h) acc += curr - h;
-    return acc;
-  }, 0);
-  if (cutSum < M) e = h - 1;
-  else {
-    max = Math.max(h, max);
-    s = h + 1;
+let maxH = -Infinity;
+function binarySearch(s, e, t) {
+  while (s <= e) {
+    const m = Math.floor((s + e) / 2);
+    const cut = cakes.reduce((acc, curr) => acc + Math.max(curr - m, 0), 0);
+    if (cut >= t) {
+      s = m + 1;
+      maxH = Math.max(maxH, m);
+    } else e = m - 1;
   }
+  return -1;
 }
-console.log(max);
+
+binarySearch(0, Math.pow(10, 9), M);
+console.log(maxH);
