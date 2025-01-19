@@ -2,12 +2,45 @@ const fs = require('fs');
 const inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
 
 const [N, M] = inputs[0].split(' ').map(Number);
+const g = inputs.slice(1).map((input) => input.split('').map(Number));
+const v = Array.from({ length: N }, () => Array(M).fill(0));
+// console.log(N, M, g, v)
+
+const dx = [-1, 0, 1, 0];
+const dy = [0, 1, 0, -1];
+function bfs(g, v, sx, sy) {
+  const q = [];
+  let sd = 1;
+  q.push([sx, sy, sd]);
+  v[sx][sy] = sd;
+
+  while (q.length > 0) {
+    const [cx, cy, cd] = q.shift();
+    for (let i = 0; i < 4; i++) {
+      const nx = cx + dx[i];
+      const ny = cy + dy[i];
+      if (nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
+      if (g[nx][ny] === 0) continue;
+      if (v[nx][ny] !== 0) continue;
+      v[nx][ny] = cd + 1;
+      q.push([nx, ny, cd + 1]);
+    }
+  }
+}
+
+bfs(g, v, 0, 0);
+// console.log(v)
+console.log(v[N - 1][M - 1]);
+
+// 다른 풀이
+// const fs = require('fs');
+// const inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
+
+// const [N, M] = inputs[0].split(' ').map(Number);
 const t = inputs.slice(1).map((row) => row.split('').map(Number));
 
 // 최단 경로 탐색 문제는 BFS 사용 권장
 // (BFS는 시작 지점에서 가까운 노드부터 차례대로 탐색하기 때문에 맨 처음 도달한 경로가 최단경로임)
-const dx = [-1, 1, 0, 0];
-const dy = [0, 0, -1, 1];
 let minBFS = Infinity;
 function solutinon_bfs(cnt) {
   const q = [[0, 0, 1]];
