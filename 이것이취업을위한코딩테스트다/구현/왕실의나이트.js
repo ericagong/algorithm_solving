@@ -1,22 +1,19 @@
-// replit: 입출력 방법
-// 입력값: console에 입력값 입력하고 ctrl + D
-// 출력값: console.log로 출력
 const fs = require('fs');
-const inputs = fs.readFileSync('/dev/stdin').toString().split('\n');
+const inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
 
-let [x, y] = inputs[0].split('');
-x = x.charCodeAt(0) - 97;
-y = Number(y) - 1;
-
-const dx = [-2, -2, 2, 2, -1, 1, -1, 1];
-const dy = [-1, 1, -1, 1, -2, -2, 2, 2];
+const cx = inputs[0][0].charCodeAt(0) - 97;
+const cy = Number(inputs[0][1]) - 1;
+// console.log(cx, cy)
 
 let cnt = 0;
-for (let i = 0; i < dx.length; i++) {
-  const cx = x + dx[i];
-  const cy = y + dy[i];
-  if (cx >= 0 && cx < 8 && cy >= 0 && cy < 8) cnt += 1;
-  else continue;
+const dx = [-2, -2, -1, 1, 2, 2, -1, 1];
+const dy = [-1, 1, 2, 2, -1, 1, -2, -2];
+const N = 8;
+for (let i = 0; i < N; i++) {
+  const nx = cx + dx[i];
+  const ny = cy + dy[i];
+  if (nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
+  // console.log(nx, ny)
+  cnt += 1;
 }
-
 console.log(cnt);
