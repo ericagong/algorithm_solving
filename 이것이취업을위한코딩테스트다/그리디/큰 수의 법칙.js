@@ -2,14 +2,13 @@ const fs = require('fs');
 const inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
 
 const [N, M, K] = inputs[0].split(' ').map(Number);
-const [max1, max2] = inputs[1]
-  .split(' ')
-  .map(Number)
-  .sort((a, b) => b - a);
+const nums = inputs[1].split(' ').map(Number);
+// console.log(N, M, K)
 
-// not parseInt
-const q = Math.floor(M / (K + 1));
-const r = M % (K + 1);
-const result = (max1 * K + max2) * q + max1 * r;
+nums.sort((a, b) => b - a);
+const [max1, max2, ...rest] = nums;
+// console.log(max1, max2)
 
+const q = parseInt(M / K);
+const result = max1 * (M - q) + max2 * q;
 console.log(result);
