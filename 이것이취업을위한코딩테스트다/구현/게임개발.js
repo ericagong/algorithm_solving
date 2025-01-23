@@ -1,68 +1,63 @@
-// test input
-// 4 4
-// 1 1 0
-// 1 1 1 1
-// 1 0 0 1
-// 1 1 0 1
-// 1 1 1 1
-
-// test output
-// 3
-
 const fs = require('fs');
-const inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n'); // trim 꼭 넣기
+const inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
 
+// 입력 처리
 const [N, M] = inputs[0].split(' ').map(Number);
-const [A, B, d] = inputs[1].split(' ').map(Number);
-const m = inputs.slice(2).map((items) => items.split(' ').map(Number));
+const [A, B, D] = inputs[1].split(' ').map(Number);
+const g = Array.from({ length: N }, (_, i) =>
+  inputs[i + 2].split(' ').map(Number),
+);
 
-// console.log(N, M, A, B, d);
-// console.log(m);
-
-// 북 동 남 서
-// 0 1 2 3
-const dx = [-1, 0, 1, 0];
+// 초기값 설정
+let cx = A,
+  cy = B,
+  cd = D;
+const dx = [-1, 0, 1, 0]; // 북, 동, 남, 서
 const dy = [0, 1, 0, -1];
-let cx = A;
-let cy = B;
-let cd = d;
-let checked = 0;
-while (checked <= 4) {
-  if (checked === 4) {
-    let bd = cd - 2 < 0 ? cd + 2 : cd - 2;
-    const nx = cx + dx[bd];
-    const ny = cy + dy[bd];
-    if (nx < 0 || ny < 0 || nx >= N || ny >= M || m[nx][ny] === 1) break;
-    else {
-      // 후진 로직
-      cd = cd;
-      m[nx][ny] = 2;
+let stop = false;
+
+g[cx][cy] = 2; // 시작 지점 방문 처리
+
+while (!stop) {
+  let moved = false;
+  let rotations = 0; // 회전 횟수 추적
+
+  // 4방향 회전하며 이동 시도
+  while (rotations < 4) {
+    const nd = (cd + 3) % 4; // 왼쪽 방향
+    const nx = cx + dx[nd];
+    const ny = cy + dy[nd];
+
+    if (nx >= 0 && nx < N && ny >= 0 && ny < M && g[nx][ny] === 0) {
+      // 이동 가능
       cx = nx;
       cy = ny;
-      checked = 0;
+      cd = nd;
+      g[nx][ny] = 2; // 방문 처리
+      moved = true;
+      break;
+    }
+
+    // 회전만 진행
+    cd = nd;
+    rotations++;
+  }
+
+  // 네 방향 모두 이동할 수 없는 경우
+  if (!moved) {
+    const backDir = (cd + 2) % 4; // 후진 방향
+    const bx = cx + dx[backDir];
+    const by = cy + dy[backDir];
+
+    if (bx < 0 || bx >= N || by < 0 || by >= M || g[bx][by] === 1) {
+      stop = true; // 후진 불가 → 종료
+    } else {
+      cx = bx;
+      cy = by; // 후진
     }
   }
-  let nd = cd - 1 < 0 ? 3 : cd - 1;
-  checked += 1;
-  const nx = cx + dx[nd];
-  const ny = cy + dy[nd];
-  if (nx >= 0 && ny >= 0 && nx < N && ny < M && m[nx][ny] === 0) {
-    // 전진 로직
-    cd = nd;
-    m[nx][ny] = 2;
-    cx = nx;
-    cy = ny;
-    checked = 0;
-  } else cd = nd;
 }
 
-// console.log(m);
-
-let count = 0;
-for (let i = 0; i < N; i++) {
-  for (let j = 0; j < M; j++) {
-    if (m[i][j] === 2) count += 1;
-  }
-}
-
-console.log(count);
+// 방문한 칸의 개수 계산
+const result = g.flat().filter((cell) => cell === 2).length;
+console.log(result);
