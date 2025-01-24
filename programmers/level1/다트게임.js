@@ -9,14 +9,17 @@ function solution(dartResult) {
   for (let i = 0; i < matches.length; i++) {
     const { score, bonus, option } = matches[i].groups;
     // console.log(score, bonus, option)
+
     const times = bonus === 'S' ? 1 : bonus === 'D' ? 2 : 3;
     let curr = Math.pow(Number(score), times);
     if (option === '*') {
       curr *= 2;
       if (i !== 0) scores[i - 1] *= 2;
     } else if (option === '#') curr *= -1;
+
     scores[i] = curr;
   }
   // console.log(scores)
+
   return scores.reduce((acc, curr) => acc + curr, 0);
 }
