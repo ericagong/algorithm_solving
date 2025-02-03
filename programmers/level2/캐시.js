@@ -1,59 +1,28 @@
-// https://school.programmers.co.kr/learn/courses/30/lessons/17680
+function solution(cacheSize, cities) {
+  const hitTime = 1;
+  const missTime = 5;
 
-function solutionWithQueue(cacheSize, cities) {
-  const MISS = 5;
-  const HIT = 1;
-
-  // cacheSize 0인 경우, 예외 처리
-  if (cacheSize === 0) return MISS * cities.length;
-
-  let answer = 0;
-  let cache = [];
-
-  cities.forEach((city) => {
-    city = city.toUpperCase();
-
-    // cache hit 여부 확인
-    let idx = cache.indexOf(city);
-
-    if (idx > -1) {
-      // cache hit
-      cache.splice(idx, 1);
-      answer += HIT;
-    } else {
-      // cache miss
-      if (cache.length >= cacheSize) cache.shift(); // LRU FIFO
-      answer += MISS;
-    }
-
-    cache.push(city);
-  });
-
-  return answer;
-}
-
-function solutionWithMap(cacheSize, cities) {
-  if (cacheSize === 0) return cities.length * 5;
+  if (cacheSize === 0) return missTime * cities.length;
 
   cities = cities.map((city) => city.toLowerCase());
-
-  let time = 0;
+  // console.log(cities)
   const cache = new Map();
+  let totalTime = 0;
 
-  cities.forEach((city, t) => {
+  cities.forEach((city, idx) => {
     if (cache.has(city)) {
-      time += 1;
-      cache.delete(city);
-      cache.set(city, t);
+      totalTime += hitTime;
+      cache.set(city, idx);
     } else {
-      time += 5;
       if (cache.size === cacheSize) {
+        // LRU
         const target = cache.keys().next().value;
         cache.delete(target);
       }
-      cache.set(city, t);
+      totalTime += missTime;
+      cache.set(city, idx);
     }
   });
 
-  return time;
+  return totalTime;
 }
