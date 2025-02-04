@@ -2,7 +2,9 @@ const fs = require('fs');
 const inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
 
 const N = Number(inputs[0]);
-const xs = [], ys = [], zs = [];
+const xs = [],
+  ys = [],
+  zs = [];
 
 for (let i = 0; i < N; i++) {
   const [px, py, pz] = inputs[i + 1].split(' ').map(Number);
@@ -16,7 +18,7 @@ xs.sort((a, b) => a[0] - b[0]);
 ys.sort((a, b) => a[0] - b[0]);
 zs.sort((a, b) => a[0] - b[0]);
 
-const pt = Array.from({length: N + 1)}, (_, i) => i);
+const pt = Array.from({ length: N + 1 }, (_, i) => i);
 const edges = [];
 let resultCost = 0;
 
