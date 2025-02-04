@@ -1,6 +1,6 @@
 // https://school.programmers.co.kr/learn/courses/30/lessons/118666
 
-function solution_hardCoding(survey, choices) {
+function solution1(survey, choices) {
   const s = [3, 2, 1, 0, 1, 2, 3];
   const m = new Map([
     ['R', 0],
@@ -26,7 +26,7 @@ function solution_hardCoding(survey, choices) {
   return result;
 }
 
-function solution_findRule(survey, choices) {
+function solution2(survey, choices) {
   const MBTI = {};
   const types = ['RT', 'CF', 'JM', 'AN'];
 

@@ -5,26 +5,7 @@ function toDays(dateStr) {
   return y * 12 * 28 + m * 28 + d;
 }
 
-function solution1(today, terms, privacies) {
-  today = toDays(today);
-  const m = new Map([]);
-  terms.forEach((t) => {
-    const [type, mm] = t.split(' ');
-    m.set(type, Number(mm) * 28);
-  });
-  // console.log(today, m)
-
-  const result = [];
-  privacies.forEach((p, i) => {
-    const [dateStr, type] = p.split(' ');
-    const startDay = toDays(dateStr);
-    if (startDay + m.get(type) <= today) result.push(i + 1);
-  });
-  // console.log(result)
-  return result;
-}
-
-function solution2(today, terms, privacies) {
+function solution(today, terms, privacies) {
   today = toDays(today);
 
   /** map 선언과 초기화를 동시에 간편하게 하는 방법 */

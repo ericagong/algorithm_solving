@@ -1,60 +1,52 @@
 // https://www.acmicpc.net/problem/3190
 
-const fs = require("fs");
-const inputs = fs.readFileSync("/dev/stdin").toString().trim().split(`\n`);
-const N = Number(inputs.shift());
-const K = Number(inputs.shift());
+const fs = require('fs')
+const inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n')
 
-let g = Array.from({ length: N }, () => new Array(N).fill(0));
-for (let i = 0; i < K; i++) {
-  const [ax, ay] = inputs.shift().split(" ").map(Number);
-  g[ax - 1][ay - 1] = 1;
+const N = Number(inputs.shift())
+const K = Number(inputs.shift())
+const g = Array.from({length: N}, () => Array(N).fill(0))
+for(let i = 0; i < K; i++) {
+  const [r, c] = inputs.shift().split(' ').map(Number)
+  g[r-1][c-1] = 1 // 사과
 }
-g[0][0] = 2;
+const L = Number(inputs.shift())
+const turns = inputs.reduce((m, input) => {
+  const [time, dir] = input.split(' ')
+  m.set(Number(time), dir)
+  return m
+}, new Map())
+// console.log(N, K, g, L, turns)
 
-const T = Number(inputs.shift());
-let turns = new Map();
-for (let i = 0; i < T; i++) {
-  const [time, direction] = inputs.shift().split(" ");
-  turns.set(Number(time), direction);
-}
+let snake = [[0, 0]]
+g[0][0] = 2
+let cd = 1 // 오른쪽
+const dx = [-1, 0, 1, 0] // 북 동 남 서
+const dy = [0, 1, 0, -1]
+let ct = 0
 
-let snake = [[0, 0]];
-let time = 0;
-const dx = [-1, 0, 1, 0]; // 상 우 하 좌
-const dy = [0, 1, 0, -1];
-let idx = 1; // 오른쪽 부터 시작
-
-while (true) {
-  const [hx, hy] = snake[snake.length - 1];
-  let nx = hx + dx[idx];
-  let ny = hy + dy[idx];
-
-  // 뱀 이동 가능 여부 확인
-  if (nx < 0 || ny < 0 || nx >= N || ny >= N || g[nx][ny] == 2) {
-    console.log(time + 1);
-    return;
+while(true) {
+  // console.log(snake, ct)
+  const [cx, cy] = snake[snake.length - 1]
+  ct += 1 // 게임 이동 진행
+  const nx = cx + dx[cd]
+  const ny = cy + dy[cd]
+  if(nx < 0 || nx > N-1 || ny < 0 || ny > N-1) break // 범위 밖 - 게임 종료 조건
+  else { // 범위 내
+    if(g[nx][ny] === 2) break // 자기 자신과 부딪침
+    
+    if(g[nx][ny] === 1) g[nx][ny] = 0
+    else {
+      const [tx, ty] = snake.shift()
+      g[tx][ty] = 0
+    }
+    snake.push([nx, ny])
+    g[nx][ny] = 2
   }
-
-  // 사과 없는 경우, 뱀 길이 축소
-  if (g[nx][ny] !== 1) {
-    const [tx, ty] = snake.shift();
-    g[tx][ty] = 0;
-  }
-
-  // 뱀 머리 움직이기
-  // g[ny][ny] = 2 // 오타
-  g[nx][ny] = 2; // 오타 주의하기!
-  snake.push([nx, ny]);
-  time += 1;
-
-  // 방향 전환
-  if (turns.has(time)) {
-    direction = turns.get(time);
-    if (direction === "D") idx += 1;
-    else idx -= 1;
-    // 예외처리
-    if (idx === 4) idx = 0;
-    if (idx === -1) idx = 3;
+  if(turns.has(ct)) {
+    if(turns.get(ct) === 'L') cd = (cd + 3) % 4 // 반시계
+    else cd = (cd + 1) % 4 // 시계
   }
 }
+
+console.log(ct)
