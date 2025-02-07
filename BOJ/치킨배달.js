@@ -1,65 +1,48 @@
 // https://www.acmicpc.net/problem/15686
 
-const fs = require('fs');
-let inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
+const fs = require('fs')
+const inputs = fs.readFileSync('/dev/stdin').toString().trim().split('\n')
 
-const [N, M] = inputs.shift().split(' ').map(Number);
-let g = [];
-for (let i = 0; i < N; i++) {
-  g[i] = inputs.shift().split(' ').map(Number);
-}
-
-let houses = [];
-let stores = [];
-for (let i = 0; i < N; i++) {
-  for (let j = 0; j < N; j++) {
-    if (g[i][j] === 1) houses.push([i, j]);
-    if (g[i][j] === 2) stores.push([i, j]);
+const [N, M] = inputs.shift().split(' ').map(Number)
+const city = []
+const houses = []
+const stores = []
+for(let i = 0; i < N; i++) {
+  city[i] = inputs.shift().split(' ').map(Number)
+  for(let j = 0; j < city[i].length; j++) {
+    if(city[i][j] === 1) houses.push([i, j])
+    else if(city[i][j] === 2) stores.push([i, j])
   }
 }
 
-// console.log(g)
-// console.log(stores, houses)
+// console.log(stores, M)
 
-// 치킨 집 M개 선택
-let visited = new Array(stores.length).fill(false);
-let selected = [];
-let min_d = Infinity;
-
-function dfs(cnt, idx) {
-  if (cnt === M) {
-    // do sth
-    // console.log(selected);
-    // combs 등 따로 저장하지 않고, 바로 계산해서 공간 save!
-    let temp = calc(selected);
-    min_d = Math.min(min_d, temp);
-    return;
+function getCD(comb) {
+  let CD = 0
+  houses.forEach(([hx, hy]) => {
+    let minHD = Infinity
+    comb.forEach(([sx, sy]) => {
+      const HD = Math.abs(hx - sx) + Math.abs(hy - sy)
+      minHD = Math.min(minHD, HD)
+    })
+    CD += minHD
+  })
+  return CD
+}
+  
+let minCD = Infinity
+function dfs(start, comb) {
+  if(comb.length === M) {
+    minCD = Math.min(minCD, getCD(comb))
+    return
   }
 
-  // i = 0 이면 순열 i = idx 부터 시작이면 조합
-  for (let i = idx; i < stores.length; i++) {
-    if (visited[i]) continue;
-    else {
-      visited[i] = true;
-      selected.push(stores[i]);
-      dfs(cnt + 1, i);
-      visited[i] = false;
-      selected.pop();
-    }
+  for(let i = start; i < stores.length; i++) {
+    comb.push(stores[i])
+    dfs(i+1, comb)
+    comb.pop()
   }
 }
 
-function calc(selected_stores) {
-  let ds = new Array(houses.length).fill(Infinity);
-  houses.forEach(([hx, hy], i) => {
-    selected_stores.forEach(([sx, sy]) => {
-      cd = Math.abs(hx - sx) + Math.abs(hy - sy);
-      ds[i] = Math.min(ds[i], cd);
-    });
-  });
-  return ds.reduce((acc, cur) => acc + cur);
-}
-
-dfs(0, 0);
-
-console.log(min_d);
+dfs(0, [])
+console.log(minCD)
